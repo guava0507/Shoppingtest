@@ -35,7 +35,7 @@ class ChangeUsersTable extends Migration
         //
         Schema::table('users', function(Blueprint $table){
             $table->dropColumn('phone');
-            $table->drop('address');
+           // $table->drop('address');
             $table->dropColumn('identcard');
         });
     }

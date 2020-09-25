@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
+                <div class="panel-heading">註冊</div>
 
                 <div class="panel-body">
                     <form class="form-horizontal" method="POST" action="{{ route('register') }}">
@@ -67,7 +67,7 @@
                             <div class="col-md-6">
                                 <input id="identcard" type="text" class="form-control" name="identcard"  pattern="^[A-Z]\d{9}$" value="{{ old('identcard') }}" required>
 
-                                @if ($errors->has('identcard''))
+                                @if ($errors->has('identcard'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('identcard') }}</strong>
                                     </span>
@@ -79,7 +79,7 @@
                             <label for="phone" class="col-md-4 control-label">電話</label>
 
                             <div class="col-md-6">
-                                <input id="phone" type="tel" class="form-control" name="email"  pattern="(^(\d{3,4}-)?\d{7,8})$|(13[0-9]{9})" value="{{ old('phone') }}" required>
+                                <input id="phone" type="tel" class="form-control" name="phone"  pattern="09[0-9]{8}$" value="{{ old('phone') }}" required>
 
                                 @if ($errors->has('phone'))
                                     <span class="help-block">
@@ -91,7 +91,7 @@
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
-                                    Register
+                                    加入會員
                                 </button>
                             </div>
                         </div>

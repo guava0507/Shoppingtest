@@ -12,7 +12,8 @@ return [
     | any other location as required by the application or its packages.
     |
     */
-
+     'api_domain' => env('API_DOMAIN', 'api.hippo-studio.com'),
+     'admin_domain' => env('ADMIN_DOMAIN','admin.hippo-studio.com'),
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
