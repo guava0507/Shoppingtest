@@ -11,11 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/login/refereshcapcha','Auth\LoginController@refereshcapcha');
+//判斷網域登入
+Route::domain('admin.shopping.com')->group(__DIR__.'/admin.php');
 
-Auth::routes();
+Route::domain('server.shopping.com')->group(__DIR__.'/server.php');
 
-Route::get('/home', 'HomeController@index')->name('home');
+
