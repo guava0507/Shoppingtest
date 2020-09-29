@@ -13,23 +13,17 @@
         <!-- Styles -->
         <style>
             html, body {
-                background-color: #fff;
+
                 color: #636b6f;
                 font-family: 'Raleway', sans-serif;
                 font-weight: 100;
-                height: 100vh;
-                margin: 0;
+                
             }
 
             .full-height {
                 height: 100vh;
             }
 
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
 
             .position-ref {
                 position: relative;
@@ -46,7 +40,7 @@
             }
 
             .title {
-                font-size: 84px;
+                font-size: 5vh;
             }
 
             .links > a {
@@ -60,12 +54,24 @@
             }
 
             .m-b-md {
+                position:absolute;
+                top:0px;
+                left:0px;
                 margin-bottom: 30px;
+            }
+            .hov{
+                position:absolute;
+                top:70px;
+                left:0px;
+                margin-left:15px;
+            }
+            .row{
+
             }
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
+        <div class=" position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
@@ -79,17 +85,47 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                   xx購物網
                 </div>
 
-                <div class="links">
+                <div class="links hov">
                     <a href="https://laravel.com/docs">Documentation</a>
                     <a href="https://laracasts.com">Laracasts</a>
                     <a href="https://laravel-news.com">News</a>
                     <a href="https://forge.laravel.com">Forge</a>
                     <a href="https://github.com/laravel/laravel">GitHub</a>
                 </div>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+                
+                <select id="productsort">
+               <option value="1" >最新排序</option>
+               <option value="2" selected>價格排序</option>
+               <option value="3">字首排序</option>
+               </select>
+                <script type="text/javascript">
+               $('#productsort').on('change',function(){
+                   var x=$('#productsort option:selected').attr('value');
+                    $.ajax({
+                        type:"GET",
+                        url: "/",
+                        data:{ prosort:x },
+                        success:function(e){
+                            console.log('good!'+e);
+                        }
+                    })
+               });
+                </script>
+
+                <div class ="row" style="position:absolute;top:30vh">
+               @foreach($products as $product)
+               <div style="float:left;margin:1.3vw;width:30vw;height:30vh;background-color:#EFFFD7" class= "col-3">
+               <span>產品名稱:{{$product->name}}</span><br>
+               <span>價格:{{$product->price}}元</span><br>
+               <span>庫存:{{$product->stock}}</span>
+               </div>
+                @endforeach
             </div>
-        </div>
+
     </body>
 </html>

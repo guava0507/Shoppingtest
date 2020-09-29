@@ -1,8 +1,9 @@
 <?php
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+Route::get('/','WelController@welcome');
 
 Route::get('/login/refereshcapcha','Auth\LoginController@refereshcapcha');
 

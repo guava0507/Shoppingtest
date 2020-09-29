@@ -97,6 +97,7 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
         ],
+        'reset_url' => env('PASSWORD_RESET_URL','server.shopping.com/')
     ],
 
 ];
