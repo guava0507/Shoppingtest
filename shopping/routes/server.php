@@ -5,6 +5,10 @@
 // });
 Route::get('/','WelController@welcome');
 
+Route::post('/prosort','WelController@selProduct')->name('prosort');
+
+Route::post('/category','WelController@selProduct')->name('category');
+
 Route::get('/login/refereshcapcha','Auth\LoginController@refereshcapcha');
 
 Auth::routes();
