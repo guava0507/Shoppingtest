@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        
+
         <title>Laravel</title>
 
         <!-- Fonts -->
@@ -21,7 +21,7 @@
                 color: #636b6f;
                 font-family: 'Raleway', sans-serif;
                 font-weight: 100;
-                
+
             }
 
             .full-height {
@@ -101,9 +101,11 @@
                <button type="button" class="btn  btn-secondary">game</button>
                </div>
 
-               
+               <div>
+              <a href="{{url('/buycar')}}" style="position:absolute;right:0px;top:40px;" class="btn btn-warning" >購物車</a>
+               </div>
 
-               
+
                 <select id="productsort" name="productsort">
                 <option value="" disabled selected hidden>排列方式</option>
                <option value="1" >最新排序</option>
@@ -130,7 +132,7 @@
                    $.ajax({
                        type:"post",
                        url:'/category',
-                       data:{cate:c, 
+                       data:{cate:c,
                        '_token':'{{csrf_token()}}'},
                        success:function(a){
                            console.log(a);
@@ -138,12 +140,14 @@
                        }
                    })
                })
+              
                 </script>
 
                 <div class ="row" style="position:absolute;top:30vh">
                @section('product')
                @foreach($products as $product)
                <div style="float:left;margin:3vw;width:30vw;height:30vh;background-color:#EFFFD7" class= "col-3">
+               <a href={{url('/productd',$product->name)}}><img style="width:50%;height:50%" src="/image/{{$product->name}}.jpg"/></a>
                <span>產品名稱:{{$product->name}}</span><br>
                <span>價格:{{$product->price}}元</span><br>
                <span>庫存:{{$product->stock}}</span>
