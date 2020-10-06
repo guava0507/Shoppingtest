@@ -23,9 +23,7 @@
     <input id="addcar" name="addcar" type="submit" value="加入購物車"/>
     </form>
 
-    <script type="text/javascript">
-     
-    </script>
+    
     </div>
     @endforeach
 </body>

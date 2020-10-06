@@ -6,6 +6,9 @@ Route::get('/','WelController@welcome');
 Route::post('/prosort','ProductSort@selProduct')->name('prosort');
 Route::post('/category','ProductSort@selProduct')->name('category');
 
+Route::post('/prolist','buycar@prolist');
+Route::post('/qchange','buycar@qchange');
+Route::post('/editfinish','buycar@finish');
 //認證刷新
 Route::get('/login/refereshcapcha','Auth\LoginController@refereshcapcha');
 

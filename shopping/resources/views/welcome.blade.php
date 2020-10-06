@@ -69,9 +69,7 @@
                 left:0px;
                 margin-left:15px;
             }
-            .row{
-
-            }
+           
         </style>
     </head>
     <body>
