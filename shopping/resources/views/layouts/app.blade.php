@@ -63,7 +63,20 @@
                                                      document.getElementById('logout-form').submit();">
                                             Logout
                                         </a>
-
+                                        <a href="{{url('/edit')}}" onclick="event.preventDefault();
+                                        document.getElementById('edit-form').submit();">
+                                        修改個人資料
+                                        </a>
+                                        <a href="{{url('/orderdata')}}" onclick="event.preventDefault();
+                                        document.getElementById('order-form').submit();">
+                                        訂單資料
+                                        </a>
+                                        <form id="order-form" action="{{url('/orderdata')}}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                        </form>
+                                        <form id="edit-form" action="{{url('/edit')}}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                        </form>
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                             {{ csrf_field() }}
                                         </form>

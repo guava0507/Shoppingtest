@@ -45,14 +45,12 @@ class buycar extends Controller
             DB::delete("delete from buycar where name ='$username'");
             return redirect('/');
         }
-        DB::delete("delete from editbuycar where name='$username'");
+      
+       DB::delete("delete from buycar where name = '$username'");
         for ($i = 0; $i < count($fname); $i++) {
             $show[] = $fprice[$i] * $fquantity[$i];
-            DB::insert("insert into editbuycar (proname,proprice,quantity,total,name) values ('$fname[$i]',$fprice[$i],$fquantity[$i],$show[$i],'$username')");
+            DB::insert("insert into buycar (proname,proprice,quantity,total,name) values ('$fname[$i]',$fprice[$i],$fquantity[$i],$show[$i],'$username')");
         }
-        DB::delete("delete from buycar b where b.proname not in (select proname from editbuycar where name ='$username')");
-        DB::update("update buycar b,editbuycar e set b.proname=e.proname,b.proprice=e.proprice,b.quantity=e.quantity,b.total=e.total where b.proname=e.proname and b.name =e.name");
-
         return redirect('/');
 
     }
@@ -137,6 +135,7 @@ class buycar extends Controller
             DB::insert("insert into orders (servername,createT) values ('$username',CURRENT_TIMESTAMP)");
             $neworder=DB::select("select id from orders order by id DESC limit 1");
             $order = $orderdate.$neworder[0]->id;
+            DB::update("update orders set orderId = '$order' where servername = '$username' order by id DESC limit 1");
             //return $order;
             DB::select("create table `$order` select * from buycar where name='$username'");
            // return $neworder[0]->id;

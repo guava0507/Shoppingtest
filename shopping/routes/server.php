@@ -17,6 +17,14 @@ Route::post('/send','buycar@sendpro');
 //認證刷新
 Route::get('/login/refereshcapcha','Auth\LoginController@refereshcapcha');
 
+//修改個人資料
+Route::post('/edit','Edituser@userdata');
+Route::post('/passcheck','Edituser@passcheck');
+Route::post('/useredit','Edituser@chooseedit');
+
+//查詢訂單
+Route::post('/orderdata','OrderSearch@orderdata');
+Route::post('/getorder','OrderSearch@getorder');
 //商品詳細資料
 Route::get('productd/{productd}','ProductDetail@product');
 
