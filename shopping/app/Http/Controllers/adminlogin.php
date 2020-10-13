@@ -10,9 +10,7 @@ class adminlogin extends Controller
     //
     public function check(Request $request)
     {
-        //return $request;
-       //$admin = $request->admin;
-       //$password=$request->adminp;
+        
         $admin = $request->adminaccount;
         $password = $request->adminpassword;
         //return $admin;
@@ -31,7 +29,8 @@ class adminlogin extends Controller
 
     }
     public function editmanage(Request $request){
-        return view('usermanage');
+        $usershow = DB::table('users')->select('name','status')->get();
+        return view('usermanage',compact('usershow'));
 
     }
 }

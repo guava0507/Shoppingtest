@@ -26,16 +26,62 @@
 </head>
 
 <body>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <div class="content">
         <div style="height:10vh;" class="title m-b-md">
-            xx購物網後台
+            xx購物網帳號管理
         </div>
-hello
+        <div id="userdiv" style="position:absolute;top:20vh;width:30vw;font-size:20px;">
+            @section('show')
+            <table class="table table-dark" id="usertable">
+                <thead>
+                    <tr>
+                        <td>使用者名稱</td>
+                        <td>管理</td>
+                        <td>訂單</td>
+                        <td>封/解鎖</td>
+                        <td>使用狀態</td>
+                    </tr>
+                </thead>
+                @foreach($usershow as $usershows)
+                <tbody>
+                    <tr>
+                        <td id="nametd">{{$usershows->name}}</td>
+                        <td><a id="datahref" href="{{url('/edit',$usershows->name)}}">資料管理</a></td>
+                        <td><a href="{{url('/search',$usershows->name)}}">會員訂單</a></td>
+                        <td>{{$usershows->status}}</td>
+                        @if($usershows->status=='啟用')
+                        <td><span><a id="banch" href="javascript:void(0)">封鎖</a></span></td>
+                        @else
+                        <td><span><a id="banch" href="javascript:void(0)">解鎖</a></span></td>
+                        @endif
+                    </tr>
+                </tbody>
+                @endforeach
+            </table>
+            @show
+        </div>
+
 
     </div>
     <script>
- 
+       $('body').on('click','#banch', function () {
+            var username = $(this).parents('tr').parents('tbody').find("#nametd").html();
+            var banstatus = $(this).html();
+            // alert($(this).parents('tr').find("#nametd").html());
+            $.ajax({
+                method: "post",
+                url: "/ban",
+                data: {
+                    banstatus: banstatus,
+                    username: username,
+                    '_token': '{{csrf_token()}}',
+                },
+                success: function (e) {
+                    $('#usertable').html(e.html);
+                    console.log(e);
+                }
+            })
+        })
     </script>
 </body>
 

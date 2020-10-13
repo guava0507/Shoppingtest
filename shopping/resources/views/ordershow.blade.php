@@ -29,21 +29,38 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <div class="content">
         <div style="height:10vh;" class="title m-b-md">
-            xx購物網後台
+            xx購物網
         </div>
-        <div style="position:absolute;top:10vh">
-        <form id ="usermanage" method="post" action="{{url('/usermanage')}}">
-            {{ csrf_field() }}
-            <button type=submit id="usermanage">帳號管理</button>
+        <span style="position:absolute;top:10vh;font-size:1vw;">所有訂單</span>
+        <div>
+
+
+            <form id="getorder-form" action="{{url('/adminshoworder')}}" method="POST">
+                <table style="position:absolute;top:13vh;border:2px;color:black" border="1">
+                    @foreach($ordershow as $ordershows)
+                    <tr>
+                        <td>
+                            {{ csrf_field() }}
+                            <a name="gethref" href="javascript:void(0)">
+                                {{$ordershows->orderId}}
+                            </a>
+                            <input type="hidden" id="gethref" name="gethref" />
+                        </td>
+                    </tr>
+                    @endforeach
+                </table>
             </form>
-        <form id ="userorder" method="post" action="{{url('/ordersearch')}}">
-            {{ csrf_field() }}
-            <button id="ordersearch">訂單查詢</button>
-        </form>
 
         </div>
-
     </div>
+
+    <script>
+        $("a").click(function () {
+            var gethref = $(this).text();
+            $("input[name='gethref']").val(gethref);
+            $("#getorder-form").submit();
+        })
+    </script>
 </body>
 
 </html>

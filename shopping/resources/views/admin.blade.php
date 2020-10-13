@@ -35,12 +35,12 @@
         <h3 class="text-center text-danger">{{$message}}</h3>
         @endif
         <form id="checkform" action={{url('/management')}} method="POST">
-        {{ csrf_field() }}
-        <span style="position:absolute;top:15vh">請輸入帳號</span><input id="adminaccount" type="text" class="form-control"
-            name="adminaccount" style="position:absolute;width:15vw;top:20vh;">
-        <span style="position:absolute;top:25vh">請輸入密碼</span><input id="adminpassword" type="password"
-            class="form-control" name="adminpassword" style="position:absolute;width:15vw;top:30vh;">
-        <button style="position:absolute;top:20vh;left:17vw;" id="sendbtn">確定</button>
+            {{ csrf_field() }}
+            <span style="position:absolute;top:15vh">請輸入帳號</span><input id="adminaccount" type="text"
+                class="form-control" name="adminaccount" style="position:absolute;width:15vw;top:20vh;">
+            <span style="position:absolute;top:25vh">請輸入密碼</span><input id="adminpassword" type="password"
+                class="form-control" name="adminpassword" style="position:absolute;width:15vw;top:30vh;">
+            <button style="position:absolute;top:20vh;left:17vw;" id="sendbtn">確定</button>
         </form>
 
     </div>
@@ -48,33 +48,9 @@
 
     <script>
         $("#sendbtn").click(function () {
-              $("#checkform").submit();
-           
-        // var msg= '{{Session::get('jsAlert')}}';
-        // var test=  '{{Session::has('jsAlert')}}';
-        // if(test)
-        // {
-        //     alert(msg);
-        // }
-            // var admin = $('#adminaccount').val();
-            // var adminp = $('#adminpassword').val();
+            $("#checkform").submit();
 
-            // $.ajax({
-            //     method: "post",
-            //     url: '/admincheck',
-            //     data: {
-            //         admin: admin,
-            //         adminp: adminp,
-            //         '_token': '{{csrf_token()}}'
-            //     },
-            //     success: function (e) {
-            //         if (e == 'x') {
-            //             alert('請輸入正確的帳號密碼');
-            //         } else {
-            //             window.location = e.url;
-            //         }
-            //     }
-            // })
+
         })
     </script>
 </body>

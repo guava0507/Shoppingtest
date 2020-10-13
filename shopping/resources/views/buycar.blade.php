@@ -27,37 +27,37 @@
   <div class="title m-b-md">
     xx購物網
   </div>
-  
-    @section('clear')
-    <table style="position:absolute;top:15vh;" class="table table-dark" id="protable">
-      <tr>
-        <td>產品名稱:</td>
-        <td>單項金額:</td>
-        <td>數量</td>
-        <td>總共:</td>
-      </tr>
-     
-      @foreach ($carlist as $carlists )
-      <tr>
-        <td name="changename"><input type="checkbox" id="checkdel" name="checkdel"
-            style="display:none;" />{{$carlists->proname}}</td>
-        <td name="tprice">{{$carlists->proprice}}元</td>
-        <td><input name="proquantity" id="proquantity" type="number" value="{{$carlists->quantity}}" style="width:5em"
-            oninput="if(value<1)value=1" disabled /></td>
 
-        <td id="totalt" name="totalt">{{$carlists->total}}元</td>
+  @section('clear')
+  <table style="position:absolute;top:15vh;" class="table table-dark" id="protable">
+    <tr>
+      <td>產品名稱:</td>
+      <td>單項金額:</td>
+      <td>數量</td>
+      <td>總共:</td>
+    </tr>
 
-      </tr>
-      @endforeach
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td id="ctotal"><span id="stotal" name="stotal">應付金額:{{$carlistt[0]->stotal}}元<span></td>
-      </tr>
+    @foreach ($carlist as $carlists )
+    <tr>
+      <td name="changename"><input type="checkbox" id="checkdel" name="checkdel"
+          style="display:none;" />{{$carlists->proname}}</td>
+      <td name="tprice">{{$carlists->proprice}}元</td>
+      <td><input name="proquantity" id="proquantity" type="number" value="{{$carlists->quantity}}" style="width:5em"
+          oninput="if(value<1)value=1" disabled /></td>
 
-    </table>
-    @show
+      <td id="totalt" name="totalt">{{$carlists->total}}元</td>
+
+    </tr>
+    @endforeach
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td id="ctotal"><span id="stotal" name="stotal">應付金額:{{$carlistt[0]->stotal}}元<span></td>
+    </tr>
+
+  </table>
+  @show
 
   <button id="proedit" name="proedit" class="btn btn-info" style="position:absolute;top:15vh;right:3vw;">修改商品</button>
   <button id="profinish" name="profinish" class="btn btn-success"
@@ -244,7 +244,7 @@
           } else {
             alert('訂單成立！');
             $('#protable').html(e.html);
-            
+
           }
         }
       })
