@@ -14,7 +14,8 @@ class WelController extends Controller
     {
         $products = DB::table('products')->get();
 
-        return view('welcome')->with('products', $products);
+        $productype=DB::table('productype')->get();
+        return view('welcome',compact('products','productype'));
 
     }
     

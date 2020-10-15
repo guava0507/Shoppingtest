@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 class ProductSort extends Controller
 {
     //
@@ -11,52 +12,72 @@ class ProductSort extends Controller
     {
         $option = $request['prosort'];
         $category = $request['cate'];
-        if (($category != "") or ($category == 'all')) {
-            $_SESSION['tmpcate'] = $category;
+       
+        
+        if ($category == 'all') {
+            Session::put('tmpcate','all');
         }
+      elseif(!isset($category))
+      {
+        
+      }
+      else
+      {
+        Session::put('tmpcate',$category);
+      }
+     
         if ($option != "") {
-            $_SESSION['tmpopt'] = $option;
+            Session::put('tmpopt',$option);
         }
+        $tmpcate=Session::get('tmpcate');
+        $tmpopt =Session::get('tmpopt');
 //種類排序
-        if(!isset($_SESSION['tmpopt']))
-        {
-        switch ($category) {
-            case 'all':
-                $products = DB::table('products')->get();
-                break;
+        if ($tmpopt=='') {
+            switch ($category) {
+                case 'all':
+                    $products = DB::table('products')->get();
+                    break;
 
-            case $category:
-                $products = DB::table('products')->where('category', '=', "$category")->get();
-                break;
-        }
-    }
-    else
-    {
-        switch($_SESSION['tmpopt'])
-        {
-            case 1 :
-            if($category=='all')
-            $products = DB::table('products')->orderBy('created_at', 'desc')->get();
-            else
-            $products = DB::table('products')->where('category', '=', $_SESSION['tmpcate'])->orderBy('created_at', 'desc')->get();
-             break;
-             case 2 :
-             if($category=='all')
-                $products = DB::table('products')->orderBy('price', 'desc')->get();
-            else
-            $products = DB::table('products')->where('category', '=', $_SESSION['tmpcate'])->orderBy('price', 'desc')->get();
-             break;
-             case 3 :
-             if($category=='all')
-                $products = DB::table('products')->orderBy('name', 'asc')->get();
-            else
-            $products = DB::table('products')->where('category', '=', $_SESSION['tmpcate'])->orderBy('name', 'asc')->get();
-             break;
-        }
-    }
+                case $category:
+                    $products = DB::table('products')->where('category', '=', "$category")->get();
+                    break;
+                    
+            }
 
-    //商品情況排序
-        if ($_SESSION['tmpcate'] == 'all') {
+        } else {
+
+            switch ($tmpopt) {
+                case 1:
+                    if ($category == 'all') {
+                        $products = DB::table('products')->orderBy('created_at', 'desc')->get();
+                    } else {
+                        $products = DB::table('products')->where('category', '=',"$tmpcate")->orderBy('created_at', 'desc')->get();
+                    }
+
+                    break;
+                case 2:
+                    if ($category == 'all') {
+                        $products = DB::table('products')->orderBy('price', 'desc')->get();
+                    } else {
+                        $products = DB::table('products')->where('category', '=',"$tmpcate")->orderBy('price', 'desc')->get();
+                    }
+
+                    break;
+                case 3:
+                    if ($category == 'all') {
+                        $products = DB::table('products')->orderBy('name', 'asc')->get();
+                    } else {
+                        $products = DB::table('products')->where('category', '=', "$tmpcate")->orderBy('name', 'asc')->get();
+                    }
+
+                    break;
+            }
+        }
+
+        //商品情況排序
+        //return $_SESSION['tmpcate'];
+
+        if ($tmpcate == 'all') {
             switch ($option) {
                 case 1:
                     $products = DB::table('products')->orderBy('created_at', 'desc')->get();
@@ -71,23 +92,24 @@ class ProductSort extends Controller
         } else {
             switch ($option) {
                 case 1:
-                    $products = DB::table('products')->where('category', '=', $_SESSION['tmpcate'])->orderBy('created_at', 'desc')->get();
+                    $products = DB::table('products')->where('category', '=', "$tmpcate")->orderBy('created_at', 'desc')->get();
                     break;
                 case 2:
-                    $products = DB::table('products')->where('category', '=', $_SESSION['tmpcate'])->orderBy('price', 'desc')->get();
+                    $products = DB::table('products')->where('category', '=',"$tmpcate")->orderBy('price', 'desc')->get();
                     break;
                 case 3:
-                    $products = DB::table('products')->where('category', '=', $_SESSION['tmpcate'])->orderBy('name', 'asc')->get();
+                    $products = DB::table('products')->where('category', '=', "$tmpcate")->orderBy('name', 'asc')->get();
             }
         }
-        // switch ($option) {
-        
-
-
-        $view = view('welcome', compact('products'))->renderSections()['product'];
+        //Session::put('tmpopt','');
+       // return $tmpopt;
+        $productype = DB::table('productype')->select('type')->get();
+        $view = view('welcome', compact('products', 'productype'))->renderSections()['product'];
         return response()->json(['html' => $view]);
+
         // return view('welcome',compact('products'));
         //  return $category;
+        //return $category;
 
     }
 }

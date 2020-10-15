@@ -38,8 +38,8 @@
                         <td>使用者名稱</td>
                         <td>管理</td>
                         <td>訂單</td>
-                        <td>封/解鎖</td>
                         <td>使用狀態</td>
+                        <td>封/解鎖</td>
                     </tr>
                 </thead>
                 @foreach($usershow as $usershows)

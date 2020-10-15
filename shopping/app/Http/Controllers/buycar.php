@@ -122,27 +122,48 @@ class buycar extends Controller
     }
     public function sendpro(Request $request)
     {
-        $check=$request->check;
-        if($check==null)
+      
+        $chkaddress=$request->getaddress;
+        $chkname=$request->getname;
+       
+        if((($chkaddress==null)or($chkname==null)))
         {
+            return 12;
             return 1;
         }
         else
         {
             $user = Auth::user();
             $username = $user->name;
+            
             $orderdate=date('Ymd',time());
             DB::insert("insert into orders (servername,createT) values ('$username',CURRENT_TIMESTAMP)");
-            $neworder=DB::select("select id from orders order by id DESC limit 1");
-            $order = $orderdate.$neworder[0]->id;
-            DB::update("update orders set orderId = '$order' where servername = '$username' order by id DESC limit 1");
-            //return $order;
-            DB::select("create table `$order` select * from buycar where name='$username'");
+             $neworder=DB::select("select id from orders order by id DESC limit 1");
+             $order = $orderdate.$neworder[0]->id;
+             
+             DB::update("update orders set orderId = '$order' where servername = '$username' order by id DESC limit 1");
+            // //  //return $order;
+           
+             $pronum = DB::table('buycar')->select('proname','proprice','quantity','total')->where('name','=',"$username")->get();
+           // return $pronum[0]->proname;
+             
+           
+            for($i=0;$i<count($pronum);$i++)
+              {
+                  $proname []=$pronum[$i]->proname;
+                  $price[]=$pronum[$i]->proprice;
+                  $quantity[]=$pronum[$i]->quantity;
+                  $total[]=$price[$i]*$quantity[$i];
+                  
+                  DB::insert("insert into `orderdetail` (orderId,proname,price,quantity,total,`name`,address,createT) values ('$order','$proname[$i]',$price[$i],$quantity[$i],$total[$i],'$chkname','$chkaddress',CURRENT_TIMESTAMP)");
+              }
+             
            // return $neworder[0]->id;
            DB::delete("delete from buycar where name='$username'"); 
            $carlist=DB::select("select * from buycar");
            $carlistt = DB::table('buycar')->select(DB::raw("SUM(total) as stotal"))->where('name', '=', "$username")->get();
-           //return redirect('/')->;
+        //    //return redirect('/')->;
+            //return $request;
            $view = view('buycar', compact('carlist','carlistt'))->renderSections()['clear'];
             return response()->json(['html' => $view]);
         }

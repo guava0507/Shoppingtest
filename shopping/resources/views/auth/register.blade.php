@@ -92,7 +92,7 @@
                             <label for="address" class="col-md-4 control-label">住址</label>
 
                             <div class="col-md-6">
-                                <input id="address" type="text" class="form-control" name="address"  pattern="/^[\u4E00-\u9FA5a-zA-Z0-9-]/" value="{{ old('address') }}" required>
+                                <input id="address" type="text" class="form-control" name="address"  pattern="^[\u4E00-\u9FA5-a-zA-Z0-9]+$" value="{{ old('address') }}" required>
 
                                 @if ($errors->has('address'))
                                     <span class="help-block">

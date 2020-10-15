@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>訂單明細</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -28,7 +28,7 @@
 <body>
     <div class="content">
         <div style="height:10vh;" class="title m-b-md">
-            xx購物網
+           xx購物網
         </div>
 
         <div>
@@ -43,7 +43,7 @@
                 @foreach($ordershow as $ordershows)
                 <tr>
                 <td>{{$ordershows->proname}}</td>
-                <td>{{$ordershows->proprice}}</td>
+                <td>{{$ordershows->price}}</td>
                 <td>{{$ordershows->quantity}}</td>
                 <td>{{$ordershows->total}}</td>
                 </tr>

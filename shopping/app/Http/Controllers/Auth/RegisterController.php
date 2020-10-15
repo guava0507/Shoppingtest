@@ -54,7 +54,6 @@ class RegisterController extends Controller
             'phone' =>'required|string|min:10|max:10',
             'address'=>'required|string|max:255',
             'identcard' =>'required|string|min:10|max:10',
-            
         ]);
     }
 

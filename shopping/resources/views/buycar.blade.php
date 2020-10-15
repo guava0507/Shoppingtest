@@ -10,6 +10,26 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <title>我是購物車</title>
   <style>
+    #back {
+      opacity: 0.8;
+      width: 100%;
+      height: 2000px;
+      background: black;
+      position: absolute;
+      display: none;
+      z-index: 1;
+    }
+
+    #allform {
+      width: 500px;
+      height: 500px;
+      background: #fff;
+      display: none;
+      z-index: 2;
+      position: absolute;
+      left: 50%;
+    }
+
     .m-b-md {
       position: absolute;
       top: 0px;
@@ -25,9 +45,22 @@
 
 <body>
   <div class="title m-b-md">
-    xx購物網
+    <a href='/'> xx購物網</a>
   </div>
-
+  <div id="allform">
+    <form id="useform">
+      <div class="form-group">
+        收件人:
+        <input type="text" name="getname" class="form-control" id="getname">
+      </div>
+      <div class="form-group">
+        地址:
+        <input type="text" class="form-control" name="getaddress" id="getaddress">
+      </div>
+      <button id="sendOK" type="button" class="btn btn-primary"> 確定送出</button>
+      <button id="btncancel" type="button" class="btn btn-secondary">取消</button>
+    </form>
+  </div>
   @section('clear')
   <table style="position:absolute;top:15vh;" class="table table-dark" id="protable">
     <tr>
@@ -59,6 +92,7 @@
   </table>
   @show
 
+
   <button id="proedit" name="proedit" class="btn btn-info" style="position:absolute;top:15vh;right:3vw;">修改商品</button>
   <button id="profinish" name="profinish" class="btn btn-success"
     style="display:none;position:absolute;top:20vh;right:3vw;">修改完成</button>
@@ -67,6 +101,8 @@
   <button id="btnall" name="btnall" class="btn btn-warning"
     style="display:none;position:absolute;top:10vh;left:0vw;">全選</button>
   <button id="btnOK" name="btnOK" class="btn btn-success" style="position:absolute;top:10vh;right:3vw;">送出訂單</button>
+  <div id="back">
+  </div>
   <script>
     $("#proedit").on("click", function () {
       $("#proedit").prop('disabled', true),
@@ -229,26 +265,66 @@
 
         check[index] = parseInt($(this).val());
       });
-      var x = 1;
+      console.log(check[0]);
+      if (check[0] == undefined) {
+        alert('請先加入商品');
+        window.location.href = '/';
+      } else {
+        $('#allform').css({
+          'display': 'block'
+        });
+        $('#back').css({
+          'display': 'block'
+        });
+
+      }
+
+
+    })
+    $('#sendOK').click(function () {
+      var check = {};
+      var getaddress = $('#getaddress').val();
+      var getname = $('#getname').val();
+      $("input[name='proquantity']").each(function (index) {
+
+        check[index] = parseInt($(this).val());
+      });
+
       $.ajax({
         url: '/send',
         method: "post",
         data: {
-          check: check,
+          getaddress: getaddress,
+          getname: getname,
           '_token': '{{csrf_token()}}'
         },
         success: function (e) {
-          if (e == 1) {
-            alert('請先加入商品');
-            window.location.href = '/';
-          } else {
-            alert('訂單成立！');
-            $('#protable').html(e.html);
 
-          }
+       
+            console.log(e);
+            //alert('訂單成立！');
+            $('#protable').html(e.html);
+            $('#allform').css({
+              'display': 'none'
+            });
+            $('#getaddress').val('');
+            $('#getname').val('');
+            $('#back').css({
+              'display': 'none'
+            });
+          
         }
       })
-
+    })
+    $('#btncancel').click(function () {
+      $('#allform').css({
+        'display': 'none'
+      });
+      $('#getaddress').val('');
+      $('#getname').val('');
+      $('#back').css({
+        'display': 'none'
+      });
     })
   </script>
 </body>

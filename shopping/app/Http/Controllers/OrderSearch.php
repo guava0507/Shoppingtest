@@ -23,8 +23,8 @@ class OrderSearch extends Controller
         $user = Auth::user();
         $username=$user->name;
         $get=$request->gethref;
-        $ordershow = DB::select("SELECT DISTINCT od.*,o.status FROM `$get` od join orders o on od.name = o.servername");
-        $ordertotal = DB::select("SELECT SUM(total) stotal FROM `$get` UNION SELECT status from orders where orderId = '$get'");
+        $ordershow = DB::select("SELECT DISTINCT od.*,o.status FROM `orderdetail` od join orders o on od.name = o.servername");
+        $ordertotal = DB::select("SELECT SUM(total) stotal FROM `orderdetail` UNION SELECT o.status from orders o join `orderdetail` od on o.orderId =  od.orderId");
        // return $ordertotal;
         return view('orderdetail',compact('ordershow','ordertotal'));
        

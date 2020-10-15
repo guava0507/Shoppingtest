@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title> xx購物網庫存管理</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -26,29 +26,20 @@
 </head>
 
 <body>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <div class="content">
         <div style="height:10vh;" class="title m-b-md">
-            xx購物網後台
+            xx購物網庫存管理
         </div>
         <div style="position:absolute;top:10vh">
-        <form id ="usermanage" method="post" action="{{url('/usermanage')}}">
-            {{ csrf_field() }}
-            <button type=submit id="usermanage">帳號管理</button>
+            <form id="addproduct" action="{{url('/addproduct')}}">
+                <button type=submit id="usermanage">上架</button>
             </form>
-        <form id ="userorder" method="post" action="{{url('/ordersearch')}}">
-            {{ csrf_field() }}
-            <button id="ordersearch">訂單查詢</button>
-        </form>
-        <form id ="producttype" method="post" action="{{url('/productype')}}">
-            {{ csrf_field() }}
-            <button>商品分類</button>
-        </form>
-        <form id ="productmanage" method="post" action="{{url('/productmanage')}}">
-            {{ csrf_field() }}
-            <button>庫存管理</button>
-        </form>
-
+            <form id="userorder" method="post" action="{{url('/ordersearch')}}">
+                <button id="ordersearch">下架</button>
+            </form>
+            <form id="producttype" method="post" action="{{url('/productype')}}">
+                <button>商品資料修改</button>
+            </form>
         </div>
 
     </div>
