@@ -22,10 +22,11 @@ Route::get('orderdetail/{orderId}','adminordersearch@detail');
 //商品類別
 Route::post('/productype','adminproductype@type');
 Route::post('/typechange','adminproductype@change');
-
+Route::post('/typedel','adminproductype@typedel');
 //庫存管理
 Route::post('/productmanage','adminproductmanage@choose');
 Route::get('/addproduct','adminproductmanage@addproduct');
+Route::get('/productmanage','adminproductmanage@productotal');
 Route::post('/addfinish','adminproductmanage@addfinish');
 //會員訂單
 Route::post('/adminshoworder','adminorder@ordershow');

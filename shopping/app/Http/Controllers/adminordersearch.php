@@ -21,25 +21,51 @@ class adminordersearch extends Controller
     public function show(Request $request)
     {
         $way=$request->way;
-        $keyword=$request->text;
-        if($way==0)
+        
+        if($way==4)
         {
-            $way=1;
+           
+            $time1 = $request->time1;
+            $time2 =  $request->time2;
+            if(($time1==null)or($time2==null))
+            {
+                return 'space';
+            }
+            $ctime1=explode('/',$time1);
+            $ctime2=explode('/',$time2);
+        
+            $atime1=$ctime1[2]."-".$ctime1[1]."-".$ctime1[0];
+            $atime2=$ctime2[2]."-".$ctime2[1]."-".$ctime2[0];
         }
-        if($way==1)
+        else
         {
-            $ordershow=DB::table('orders')->select('orderId')->where('servername','=',"$keyword")->get();
+            $keyword=$request->text;
         }
-        elseif($way==2)
+      // return $atime1;
+       
+       //return $time2;
+        
+    
+        switch($way)
         {
-            $ordershow=DB::table('orders')->select('orderId')->where('orderId','=',"$keyword")->get();
+            case 0:
+                $ordershow=DB::table('orders')->select('orderId')->where('servername','=',"$keyword")->get();
+            break;
+            case 1:
+                $ordershow=DB::table('orders')->select('orderId')->where('servername','=',"$keyword")->get();
+            break;
+            case 2:
+                $ordershow=DB::table('orders')->select('orderId')->where('orderId','=',"$keyword")->get();
+            break;
+            case 3:
+                $ordershow=DB::table('orderdetail')->select('orderId')->where('proname','=',"$keyword")->get();
+            break;
+            case 4:
+                $ordershow=DB::select("select orderId from orders where createT between '$atime1' and '$atime2'");
+                //$ordershow=DB::table('orderdetail')->select('orderId')->where('createT','between',"$atime1",'and',"$atime2")->get();
+            break;
         }
-        elseif($way==3)
-        {
-            $ordershow=DB::table('orders')->select('orderId')->where('servername','=',"$keyword")->get();
 
-        }
-        //return $keyword;
         $view = view('adminsearchorder', compact('ordershow'))->renderSections()['resault'];
         return response()->json(['html' => $view]);
        // return $request;
@@ -47,8 +73,11 @@ class adminordersearch extends Controller
     public function detail($orderId)
     {
         $get=$orderId;
-        $ordershow = DB::select("SELECT DISTINCT od.*,o.status FROM `$get` od join orders o on od.name = o.servername");
-        $ordertotal = DB::select("SELECT SUM(total) stotal FROM `$get` UNION SELECT status from orders where orderId = '$get'");
+        $ordershow=DB::select("select od.*  FROM orderdetail od join orders o on od.orderId =  o.orderId  where od.orderId=$get");
+        $ordertotal =DB::select("select SUM(total) stotal from orderdetail where orderId = $get UNION select status from orders where orderId=$get");
+
+        // $ordershow = DB::select("SELECT DISTINCT od.*,o.status FROM `$get` od join orders o on od.name = o.servername");
+        // $ordertotal = DB::select("SELECT SUM(total) stotal FROM `$get` UNION SELECT status from orders where orderId = '$get'");
        // return $ordertotal;
         return view('orderdetail',compact('ordershow','ordertotal'));
 

@@ -13,6 +13,18 @@ class adminproductype extends Controller
         $type = DB::table('productype')->select('type')->get();
         return view('typemanage', compact('type'));
     }
+    public function typedel(Request $request)
+    {
+        $change = $request->typechange;
+        DB::table('productype')->truncate();
+        for ($i = 0; $i < count($change); $i++) {
+            DB::insert("insert into productype (type) values ('$change[$i]')");
+        }
+        $type = DB::table('productype')->select('type')->get();
+        $view = view('typemanage', compact('type'))->renderSections()['change'];
+        return response()->json(['html' => $view]);
+
+    }
     public function change(Request $request)
     {
 
@@ -22,7 +34,7 @@ class adminproductype extends Controller
         if ((($text == 'false') and ($add == ""))) {
             return 'white';
         }
-        if((($text == 'true') and ($add == ""))) {
+        if ((($text == 'true') and ($add == ""))) {
             DB::table('productype')->truncate();
             for ($i = 0; $i < count($change); $i++) {
                 DB::insert("insert into productype (type) values ('$change[$i]')");
@@ -38,15 +50,10 @@ class adminproductype extends Controller
         if (count($check) != 0) {
             return 'false';
         } else {
-            DB::table('productype')->truncate();
-
-            for ($i = 0; $i < count($change); $i++) {
-                DB::insert("insert into productype (type) values ('$change[$i]')");
-            }
 
             DB::insert("insert into productype (type) values ('$add')");
         }
-        
+
         $type = DB::table('productype')->select('type')->get();
         $view = view('typemanage', compact('type'))->renderSections()['change'];
         return response()->json(['html' => $view]);

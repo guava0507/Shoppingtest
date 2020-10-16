@@ -28,11 +28,12 @@
 <body>
     <div class="content">
         <div style="height:10vh;" class="title m-b-md">
-           xx購物網
+            xx購物網
         </div>
 
         <div>
-            <span style="position:absolute;top:10vh">訂單內容</span>
+            <span style="position:absolute;top:10vh">訂單內容</span><span
+                style="position:absolute;top:10%;left:5%">收件人:{{$ordershow[0]->name}}</span>
             <table style="position:absolute;top:13vh;border:2px;" class="table table-dark">
                 <tr>
                     <td>產品名稱:</td>
@@ -42,18 +43,18 @@
                 </tr>
                 @foreach($ordershow as $ordershows)
                 <tr>
-                <td>{{$ordershows->proname}}</td>
-                <td>{{$ordershows->price}}</td>
-                <td>{{$ordershows->quantity}}</td>
-                <td>{{$ordershows->total}}</td>
+                    <td>{{$ordershows->proname}}</td>
+                    <td>{{$ordershows->price}}</td>
+                    <td>{{$ordershows->quantity}}</td>
+                    <td>{{$ordershows->total}}</td>
                 </tr>
                 @endforeach
                 <tr>
                     <td>出貨狀況:{{$ordertotal[1]->stotal}}</td>
                     <td></td>
-                    <td></td>
+                    <td>地址:{{$ordershow[0]->address}}</td>
                     <td>應付金額:{{$ordertotal[0]->stotal}}元<span></td>
-                  </tr>
+                </tr>
             </table>
         </div>
     </div>

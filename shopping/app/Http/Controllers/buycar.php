@@ -28,30 +28,23 @@ class buycar extends Controller
 
     public function prolist(Request $request)
     {
-        $t = $request->list;
-        //return $t;
-
-        return "應付金額：$t";
-    }
-//修改完成
-    public function finish(Request $request)
-    {
         $user = Auth::user();
         $username = $user->name;
-        $fname = $request['changename'];
-        $fquantity = $request['changeq'];
-        $fprice = $request['price'];
-        if ($fname == null) {
-            DB::delete("delete from buycar where name ='$username'");
-            return redirect('/');
+
+        $delpro = $request->delname;
+
+        if (isset($delpro)) {
+
+            for ($i = 0; $i < count($delpro); $i++) {
+                DB::delete("delete from buycar where  proname='$delpro[$i]' and name ='$username'");
+            }
+            $carlist = DB::table('buycar')->select('proname', 'proprice', 'quantity', 'total')->where('name', '=', $username)->get();
+            $carlistt = DB::table('buycar')->select(DB::raw("SUM(total) as stotal"))->where('name', '=', "$username")->get();
+            $view = view('buycar', compact('carlist', 'carlistt'))->renderSections()['clear'];
+            return response()->json(['html' => $view]);
+        } else {
+            return "nothing";
         }
-      
-       DB::delete("delete from buycar where name = '$username'");
-        for ($i = 0; $i < count($fname); $i++) {
-            $show[] = $fprice[$i] * $fquantity[$i];
-            DB::insert("insert into buycar (proname,proprice,quantity,total,name) values ('$fname[$i]',$fprice[$i],$fquantity[$i],$show[$i],'$username')");
-        }
-        return redirect('/');
 
     }
 
@@ -60,6 +53,7 @@ class buycar extends Controller
         $cproname = $request['proname'];
         $cquantity = $request['changeq'];
         $cprice = $request['price'];
+
         for ($i = 0; $i < count($cprice); $i++) {
             $checknum = DB::select("select stock,name from products");
             for ($j = 0; $j < count($checknum); $j++) {
@@ -110,10 +104,7 @@ class buycar extends Controller
                     }
                 }
             }
-
-            DB::update("update products set stock=stock-$probuy where name='$proname'");
             return redirect('/');
-           
 
         } else {
             return redirect('login')->with('alert', '請先登入帳號');
@@ -122,53 +113,47 @@ class buycar extends Controller
     }
     public function sendpro(Request $request)
     {
-      
-        $chkaddress=$request->getaddress;
-        $chkname=$request->getname;
-       
-        if((($chkaddress==null)or($chkname==null)))
-        {
+
+        $chkaddress = $request->getaddress;
+        $chkname = $request->getname;
+        $chkquantity = $request->getquantity;
+        if ((($chkaddress == null) or ($chkname == null))) {
             return 12;
             return 1;
-        }
-        else
-        {
+        } else {
             $user = Auth::user();
             $username = $user->name;
-            
-            $orderdate=date('Ymd',time());
+
+            $orderdate = date('Ymd', time());
             DB::insert("insert into orders (servername,createT) values ('$username',CURRENT_TIMESTAMP)");
-             $neworder=DB::select("select id from orders order by id DESC limit 1");
-             $order = $orderdate.$neworder[0]->id;
-             
-             DB::update("update orders set orderId = '$order' where servername = '$username' order by id DESC limit 1");
+            $neworder = DB::select("select id from orders order by id DESC limit 1");
+            $order = $orderdate . $neworder[0]->id;
+
+            DB::update("update orders set orderId = '$order' where servername = '$username' order by id DESC limit 1");
             // //  //return $order;
-           
-             $pronum = DB::table('buycar')->select('proname','proprice','quantity','total')->where('name','=',"$username")->get();
-           // return $pronum[0]->proname;
-             
-           
-            for($i=0;$i<count($pronum);$i++)
-              {
-                  $proname []=$pronum[$i]->proname;
-                  $price[]=$pronum[$i]->proprice;
-                  $quantity[]=$pronum[$i]->quantity;
-                  $total[]=$price[$i]*$quantity[$i];
-                  
-                  DB::insert("insert into `orderdetail` (orderId,proname,price,quantity,total,`name`,address,createT) values ('$order','$proname[$i]',$price[$i],$quantity[$i],$total[$i],'$chkname','$chkaddress',CURRENT_TIMESTAMP)");
-              }
-             
-           // return $neworder[0]->id;
-           DB::delete("delete from buycar where name='$username'"); 
-           $carlist=DB::select("select * from buycar");
-           $carlistt = DB::table('buycar')->select(DB::raw("SUM(total) as stotal"))->where('name', '=', "$username")->get();
-        //    //return redirect('/')->;
+
+            $pronum = DB::table('buycar')->select('proname', 'proprice', 'quantity', 'total')->where('name', '=', "$username")->get();
+            // return $pronum[0]->proname;
+
+            for ($i = 0; $i < count($pronum); $i++) {
+                $proname[] = $pronum[$i]->proname;
+                $price[] = $pronum[$i]->proprice;
+                $quantity[] = $pronum[$i]->quantity;
+                $total[] = $price[$i] * $quantity[$i];
+
+                DB::insert("insert into `orderdetail` (orderId,proname,price,quantity,total,`name`,address,createT) values ('$order','$proname[$i]',$price[$i],$quantity[$i],$total[$i],'$chkname','$chkaddress',CURRENT_TIMESTAMP)");
+                DB::update("update products set stock=stock-$quantity[$i] where name = '$proname[$i]'");
+            }
+
+            // return $neworder[0]->id;
+            DB::delete("delete from buycar where name='$username'");
+            $carlist = DB::select("select * from buycar");
+            $carlistt = DB::table('buycar')->select(DB::raw("SUM(total) as stotal"))->where('name', '=', "$username")->get();
+            //    //return redirect('/')->;
             //return $request;
-           $view = view('buycar', compact('carlist','carlistt'))->renderSections()['clear'];
+            $view = view('buycar', compact('carlist', 'carlistt'))->renderSections()['clear'];
             return response()->json(['html' => $view]);
         }
-        
-       
-       
+
     }
 }

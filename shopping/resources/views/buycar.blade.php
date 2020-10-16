@@ -72,11 +72,10 @@
 
     @foreach ($carlist as $carlists )
     <tr>
-      <td name="changename"><input type="checkbox" id="checkdel" name="checkdel"
-          style="display:none;" />{{$carlists->proname}}</td>
+      <td name="changename"><input type="checkbox" id="checkdel" name="checkdel" />{{$carlists->proname}}</td>
       <td name="tprice">{{$carlists->proprice}}元</td>
       <td><input name="proquantity" id="proquantity" type="number" value="{{$carlists->quantity}}" style="width:5em"
-          oninput="if(value<1)value=1" disabled /></td>
+          oninput="if(value<1)value=1" /></td>
 
       <td id="totalt" name="totalt">{{$carlists->total}}元</td>
 
@@ -93,38 +92,14 @@
   @show
 
 
-  <button id="proedit" name="proedit" class="btn btn-info" style="position:absolute;top:15vh;right:3vw;">修改商品</button>
-  <button id="profinish" name="profinish" class="btn btn-success"
-    style="display:none;position:absolute;top:20vh;right:3vw;">修改完成</button>
+  
   <button id="btndelete" name="btndelete" class="btn btn-danger"
-    style="display:none;position:absolute;top:25vh;right:3vw;">刪除</button>
-  <button id="btnall" name="btnall" class="btn btn-warning"
-    style="display:none;position:absolute;top:10vh;left:0vw;">全選</button>
+    style="position:absolute;top:25vh;right:3vw;">刪除</button>
+  <button id="btnall" name="btnall" class="btn btn-warning" style="position:absolute;top:10vh;left:0vw;">全選</button>
   <button id="btnOK" name="btnOK" class="btn btn-success" style="position:absolute;top:10vh;right:3vw;">送出訂單</button>
   <div id="back">
   </div>
   <script>
-    $("#proedit").on("click", function () {
-      $("#proedit").prop('disabled', true),
-        $("input[name='proquantity']").prop('disabled', false),
-        $("input[name='checkdel']").css({
-          'display': 'block'
-        }),
-        $("#profinish").css({
-          'display': 'block'
-        }),
-        $("#btndelete").css({
-          'display': 'block'
-        }),
-        $("#btnall").css({
-          'display': 'block'
-        });
-      $("#btnOK").css({
-        'display': 'none'
-      })
-    })
-
-
     //全選
     $("#btnall").click(function () {
       var all = $(":checkbox");
@@ -182,8 +157,15 @@
     //刪除及金額變動
     $("#btndelete").click(function () {
       var allcheck = $(":checkbox:checked");
-      allcheck.each(function () {
+      var delname = {};
+      var delprice = {};
+
+      var deltotal = {};
+      allcheck.each(function (e) {
         $(this).parent().parent().remove();
+        delname[e] = $(this).parent().text();
+        delprice[e] = $(this).parent().parent().find("td").eq(1).text();
+
       });
 
       var total = 0;
@@ -195,69 +177,20 @@
         url: '/prolist',
         method: "post",
         data: {
+          delprice: delprice,
+          delname: delname,
+
           list: total,
           '_token': '{{csrf_token()}}'
         },
         success: function (e) {
           console.log(e);
-          $('#stotal').text(e);
+          if (e != 'nothing') {
+            $('#protable').html(e.html)
+          }
         }
       })
     });
-
-
-    //修改完成
-    $("#profinish").click(function () {
-      var changeq = {};
-      var changename = {};
-      var price = {};
-
-      $("td[name='tprice']").each(function (index) {
-        price[index] = parseInt($(this).text());
-      });
-      $("td[name='changename']").each(function (index) {
-        changename[index] = $(this).text();
-      });
-      $("input[name='proquantity']").each(function (index) {
-
-        changeq[index] = parseInt($(this).val());
-      });
-      if (price == "") {
-        changename = 0;
-        price = 0;
-        changeq = 0;
-      }
-      $.ajax({
-        url: '/editfinish',
-        method: "post",
-        data: {
-          changeq: changeq,
-          changename: changename,
-          price: price,
-          '_token': '{{csrf_token()}}'
-        },
-        success: function (e) {
-          $("input[name='proquantity']").prop('disabled', true),
-            $("input[name='checkdel']").css({
-              'display': 'none'
-            }),
-            $("#profinish").css({
-              'display': 'none'
-            }),
-            $("#btndelete").css({
-              'display': 'none'
-            }),
-            $("#btnall").css({
-              'display': 'none'
-            });
-          $("#proedit").prop('disabled', false);
-          $("#btnOK").css({
-            'display': 'block'
-          })
-        }
-      })
-    })
-
     //送出訂單
     $("#btnOK").on('click', function () {
       var check = {};
@@ -265,6 +198,7 @@
 
         check[index] = parseInt($(this).val());
       });
+
       console.log(check[0]);
       if (check[0] == undefined) {
         alert('請先加入商品');
@@ -283,6 +217,11 @@
     })
     $('#sendOK').click(function () {
       var check = {};
+      var getquantity = {};
+      $("input[name='proquantity']").each(function (index) {
+
+        getquantity[index] = $(this).val();
+      })
       var getaddress = $('#getaddress').val();
       var getname = $('#getname').val();
       $("input[name='proquantity']").each(function (index) {
@@ -294,25 +233,26 @@
         url: '/send',
         method: "post",
         data: {
+          getquantity: getquantity,
           getaddress: getaddress,
           getname: getname,
           '_token': '{{csrf_token()}}'
         },
         success: function (e) {
 
-       
-            console.log(e);
-            //alert('訂單成立！');
-            $('#protable').html(e.html);
-            $('#allform').css({
-              'display': 'none'
-            });
-            $('#getaddress').val('');
-            $('#getname').val('');
-            $('#back').css({
-              'display': 'none'
-            });
-          
+
+          console.log(e);
+          //alert('訂單成立！');
+          $('#protable').html(e.html);
+          $('#allform').css({
+            'display': 'none'
+          });
+          $('#getaddress').val('');
+          $('#getname').val('');
+          $('#back').css({
+            'display': 'none'
+          });
+
         }
       })
     })

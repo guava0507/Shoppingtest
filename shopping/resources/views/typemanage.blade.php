@@ -57,14 +57,30 @@
     <script>
         var num = 0;
         $('body').on('click', '#btndel', function () {
-            $(this).parent().parent().remove();
-        });
+            if (confirm('確定要刪除嗎')) {
+                $(this).parent().parent().remove();
+                var typechange = {};
+                $("td[name='producttype']").each(function (index) {
+                    typechange[index] = $(this).text();
+                });
+                $.ajax({
+                    url: '/typedel',
+                    method: "post",
+                    data: {
+                        typechange: typechange,
+                        '_token': '{{csrf_token()}}'
+                    },
+                    success: function (e) {
+                        $('#typetable').html(e.html);
+                    }
+                })
+            }
+        })
         $('#btnadd').click(function () {
             $('#addtext').prop('disabled', false);
             $('#btnadd').css({
                 'display': 'none'
             });
-            num++;
             $('#btncancel').css({
                 'display': 'block'
             });
@@ -84,18 +100,15 @@
             });
         })
         $('#btnOK').click(function () {
-
-            var x = $('#addtext').prop("disabled");
-            
             $('#btnadd').css({
                 'display': 'block'
             });
             $('#addtext').prop('disabled', true);
-
+            var x = $("#addtext").prop("disabled");
             $('#btncancel').css({
                 'display': 'none'
             });
-            
+
             var typechange = {};
             var addtext = $('#addtext').val();
             $("td[name='producttype']").each(function (index) {
@@ -106,7 +119,6 @@
                 method: "post",
                 data: {
                     x:x,
-                    num: num,
                     addtext: addtext,
                     typechange: typechange,
                     '_token': '{{csrf_token()}}'
@@ -116,16 +128,11 @@
                     if (e == 'false') {
                         alert('請勿輸入已有的類別');
                         $('#addtext').val('');
-                    } 
-                    else if(e=='white')
-                    {
+                    } else if (e == 'white') {
                         alert('請勿輸入空白');
-                    }
-                    else if(e=='nothing')
-                    {
+                    } else if (e == 'nothing') {
                         console.log(e);
-                    }
-                    else {
+                    } else {
                         $('#typetable').html(e.html);
                         $('#addtext').val('');
                     }

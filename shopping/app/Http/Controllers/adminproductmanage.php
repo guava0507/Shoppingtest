@@ -2,35 +2,47 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class adminproductmanage extends Controller
 {
     //
-    public function choose(Request $request){
+    public function choose(Request $request)
+    {
 
         return view('productmanage');
     }
-    public function addproduct(){
-        $productval=DB::table('productype')->where('type','not like','%all%')->get();
+    public function addproduct()
+    {
+        $productval = DB::table('productype')->where('type', 'not like', '%all%')->get();
 
-        return view('addproduct',compact('productval'));
+        return view('addproduct', compact('productval'));
     }
     public function addfinish(Request $request)
     {
-        $chkname= $request->productid;
         
-        $check=DB::table('products')->select('name')->where('name','=',"$chkname")->get();
-      
-       
-        $filename=$chkname;
-        if(isset($_FILES["file"]["name"]))
-        {
-            rename(($_FILES["file"]["name"]), $filename);
+        $file = $request->file;
+        
+        $chkname = $request->productid;
+        $chkprice = $request->productprice;
+        $chkquantity = $request->productquantity;
+        $chktype = $request->newproduct;
+        $check = DB::table('products')->select('name')->where('name', '=', "$chkname")->get();
+        if (count($check) > 0) {
+            return "rename";
+        } elseif (($chkname == null) or ($chkprice == null) or ($chkquantity == null)) {
+            return 'space';
+        } else {
+            DB::insert("insert into products (name,price,stock,category) values ('$chkname',$chkprice,$chkquantity,'$chktype')");
+            $name=$chkname.'.jpg';
+            $file->move(public_path().'/image/',$name);
         }
-       move_uploaded_file($_FILES["file"]["tmp_name"], "public/image/".$filename.".jpg");
-        return count($check);
-        return $request;
+    }
+    public function productotal(){
+        $products=DB::table('products')->get();
+        $productype=DB::table('productype')->get();
+        return view('productotal',compact('productype','products'));
+
     }
 }
