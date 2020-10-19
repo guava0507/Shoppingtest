@@ -26,7 +26,21 @@ Route::post('/typedel','adminproductype@typedel');
 //庫存管理
 Route::post('/productmanage','adminproductmanage@choose');
 Route::get('/addproduct','adminproductmanage@addproduct');
-Route::get('/productmanage','adminproductmanage@productotal');
+
+//商品情形
+Route::post('/productotal','adminproductmanage@productotal');
 Route::post('/addfinish','adminproductmanage@addfinish');
+Route::post('/changestatus','adminproductmanage@changestatus');
+Route::post('/formshow','adminproductmanage@formshow');
+Route::post('/proeditOK','adminproductmanage@editOK');
+Route::post('/categorychange','adminproductmanage@catechoose');
 //會員訂單
 Route::post('/adminshoworder','adminorder@ordershow');
+
+//折扣優惠
+Route::post('/sale','adminsale@sale');
+
+Route::post('/moneysale',function(){
+    return view('moneysale');
+});
+Route::post('/inmoneysale','adminsale@moneysale');

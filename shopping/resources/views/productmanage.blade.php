@@ -34,7 +34,8 @@
             <form id="addproduct" action="{{url('/addproduct')}}">
                 <button type="submit" id="usermanage">新增商品</button>
             </form>
-            <form id="userorder"  action="{{url('/productmanage')}}">
+            <form id="userorder"  method="post"action="{{url('/productotal')}}">
+                {{ csrf_field() }}
                 <button  type="submit">商品管理</button>
             </form>
 

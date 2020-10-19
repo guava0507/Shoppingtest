@@ -12,7 +12,7 @@ class WelController extends Controller
     //
     public function welcome()
     {
-        $products = DB::table('products')->get();
+        $products = DB::table('products')->where('status','=','上架')->get();
 
         $productype=DB::table('productype')->get();
         return view('welcome',compact('products','productype'));

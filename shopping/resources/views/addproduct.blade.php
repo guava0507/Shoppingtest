@@ -55,11 +55,15 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" value="y" name="upcheck">&nbsp;;&nbsp;&nbsp;&nbsp;是否上架</span>
+                </div>
                 <div class="form-group">
                     <span>圖片:</span>
                     <input type="file" name="file" id="file" onchange="showImg(this)" />
                     <img id="showimg" src="" style="display:none;width:40%;height:30%" />
                 </div>
+                
                 <button id="addbtn" type="button" class="btn btn-primary">確認新增</button>
             </form>
             @show
@@ -93,6 +97,7 @@
                         showimg.style.display='none';
                         console.log(e);
                     }
+                    console.log(e);
 
                 }
             })

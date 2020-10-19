@@ -35,7 +35,7 @@
             <button id="btnedit" class="btn btn-info">修改</button>
             <button id="btnOK" class="btn btn-success" style="display:none">完成</button>
 
-
+            @section('form')
             <form id="dataform">
 
                 {{ csrf_field() }}
@@ -58,7 +58,7 @@
                     <span>地址:</span><input name="usaddress" id="usaddress"
                         style="position: absolute;left:10vw;margin-bottom:3px" pattern="^[\u4E00-\u9FA5-a-zA-Z0-9]+$"
                         type="text" value="{{$data->address}}" /><br>
-
+                    <input name="usId" id='usId' type="hidden" value="{{$data->id}}"    />
                     <span>電話:</span><input name="usphone" id="usphone"
                         style="position: absolute;left:10vw;margin-bottom:3px" pattern="09[0-9]{8}$" type="text"
                         value="{{$data->phone}}" />
@@ -66,16 +66,13 @@
                 </fieldset>
 
             </form>
+            @show
         </div>
 
 
     </div>
     <script>
-        var regadd = /([A-Za-z]|[0-9]|-){7,16}/;
-        var regphone = /09[0-9]{8}$/;
-        var regemail = /\w+([.-]\w+)*@\w+([.-]\w+)+/;
-        var regident = /^[A-Z]\d{9}$/;
-        var oldname = $('#usname').val();
+        var oldname=$('#usname').val();
         $("#btnedit").click(function () {
             $('#formlock').prop('disabled', false);
             $('#btnOK').css({
@@ -87,19 +84,21 @@
         })
         $('#btnOK').click(function () {
 
-
             var namech = $('#usname').val();
             var passwordch = $('#uspassword').val();
             var identch = $('#usidentcard').val();
             var emailch = $('#usemail').val();
             var addressch = $('#usaddress').val();
             var phonech = $('#usphone').val();
+            
+            var id=$('#usId').val();
             if (passwordch == "********") {
                 $.ajax({
                     method: "post",
                     url: "/userdatach",
                     data: {
-                        oldname: oldname,
+                        id:id,
+                        oldname:oldname,
                         namech: namech,
                         identch: identch,
                         emailch: emailch,
@@ -110,10 +109,6 @@
                     success: function (e) {
                         console.log(e);
                         switch (e) {
-                            case 'nameused':
-                                alert('名稱已使用');
-                                break;
-
                             case 'identused':
                                 alert('身分證已使用');
                                 break;
@@ -122,44 +117,7 @@
                                 alert('信箱已使用');
                                 break;
                         }
-                        $('#formlock').prop('disabled', true);
-                        $('#btnOK').css({
-                            'display': 'none'
-                        });
-                        $('#btnedit').css({
-                            'display': 'block'
-                        });
-                    }
-                })
-            } else if (reg.test(passwordch)) {
-                //alert("正確")
-                $.ajax({
-                    method: "post",
-                    url: "/userdatach",
-                    data: {
-                        namech: namech,
-                        identch: identch,
-                        addressch: addressch,
-                        phonech: phonech,
-                        passwordch: passwordch,
-                        '_token': '{{csrf_token()}}'
-                    },
-                    success: function (e) {
-                        console.log(e);
-                        switch (e) {
-                            case 'nameused':
-                                alert('名稱已使用');
-                                break;
-
-                            case 'identused':
-                                alert('身分證已使用');
-                                break;
-
-                            case 'emailused':
-                                alert('信箱已使用');
-                                break;
-                        }
-
+                        $("#datafrom").html(e.html);
                         $('#formlock').prop('disabled', true);
                         $('#btnOK').css({
                             'display': 'none'
@@ -170,7 +128,39 @@
                     }
                 })
             } else {
-                alert('密碼格式不符合！');
+                $.ajax({
+                    method: "post",
+                    url: "/userdatach",
+                    data: {
+                        oldname:oldname,
+                        namech: namech,
+                        identch: identch,
+                        addressch: addressch,
+                        phonech: phonech,
+                        passwordch: passwordch,
+                        '_token': '{{csrf_token()}}'
+                    },
+                    success: function (e) {
+                        console.log(e);
+                        switch (e) {
+                            case 'identused':
+                                alert('身分證已使用');
+                                break;
+
+                            case 'emailused':
+                                alert('信箱已使用');
+                                break;
+                        }
+                        $("#datafrom").html(e.html);
+                        $('#formlock').prop('disabled', true);
+                        $('#btnOK').css({
+                            'display': 'none'
+                        });
+                        $('#btnedit').css({
+                            'display': 'block'
+                        });
+                    }
+                })
             }
 
         })

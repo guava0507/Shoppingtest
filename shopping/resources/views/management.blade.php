@@ -48,6 +48,10 @@
             {{ csrf_field() }}
             <button>庫存管理</button>
         </form>
+        <form id ="salemanage" method="post" action="{{url('/sale')}}">
+            {{ csrf_field() }}
+            <button>優惠活動</button>
+        </form>
 
         </div>
 

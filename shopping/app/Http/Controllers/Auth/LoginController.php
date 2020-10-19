@@ -40,4 +40,5 @@ class LoginController extends Controller
     {
         return captcha_img('flat');
     }
+   
 }
