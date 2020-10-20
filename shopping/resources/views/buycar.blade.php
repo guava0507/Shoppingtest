@@ -57,6 +57,12 @@
         地址:
         <input type="text" class="form-control" name="getaddress" id="getaddress">
       </div>
+      <div class="form-group">
+        優惠選擇:
+        <select id="selectsale" >
+          
+        </select>
+      </div>
       <button id="sendOK" type="button" class="btn btn-primary"> 確定送出</button>
       <button id="btncancel" type="button" class="btn btn-secondary">取消</button>
     </form>

@@ -137,18 +137,55 @@
               
                 </script>
 
-                <div class ="row" style="position:absolute;top:30vh">
+                <div class ="row" style="position:relative;top:30vh">
                @section('product')
                @foreach($products as $product)
+
                <div style="float:left;margin:3vw;width:100vw;height:30vh;background-color:#EFFFD7" class= "col-3">
                <a href={{url('/productd',$product->name)}}><img style="width:50%;height:50%" src="/image/{{$product->name}}.jpg"/></a>
-               <span>產品名稱:{{$product->name}}</span><br>
-               <span>價格:{{$product->price}}元</span><br>
-               <span>庫存:{{$product->stock}}</span>
+               <input id="inputId" type="hidden" value="{{$product->id}}"/>
+               <input type="hidden" name="_token" id="token" value="{{csrf_token()}}"/>
+               產品名稱:<span id="name">{{$product->name}}</span><br>
+               價格:<span id="price">{{$product->price}}</span>元<br>
+               庫存:<span id="stock">{{$product->stock}}</span>
+               <input style="position:absolute;bottom:3vh;left:10vw" id="addcar" name="addcar" type="button" value="加入購物車" />
+               <input style="position:absolute;bottom:3vh;left:5vw" id="addnum" type="number"  value="1" min="1" max="{{$product->stock}}"/>
                </div>
+            
                 @endforeach
                 @show
             </div>
+    <script>
+        $('body').on('click', '#addcar', function () {
+            var name = $(this).parent().find('#name').text();
+            var price =$(this).parent().find('#price').text();
+            var stock = $(this).parent().find('#stock').text();
+            var id = $(this).parent().find('#inputId').val();
+            var num =$(this).parent().find('#addnum').val();
 
+    
+            $.ajax({
+                method:"post",
+                url:'/addbuycar',
+                data:{
+                    name:name,
+                    price:price,
+                    stock:stock,
+                    num:num,
+                    id:id,
+                    '_token': $('#token').val()
+                },
+                success:function(e){
+                    if(e=='login')
+                    {
+                        alert('請先登入帳號');
+                        window.location.replace('/login');
+                    }
+                    console.log(e);
+                }
+            })
+            
+        })
+    </script>
     </body>
 </html>

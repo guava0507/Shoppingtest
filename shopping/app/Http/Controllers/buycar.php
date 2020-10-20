@@ -25,7 +25,32 @@ class buycar extends Controller
             return redirect('login')->with('alert', '請先登入帳號');
         }
     }
+    public function weladd(Request $request)
+    {
 
+        $name = $request->name;
+        $price = $request->price;
+        $num = $request->num;
+        $id = $request->id;
+        $user = Auth::user();
+        $username = $user->name;
+
+       // return $request;
+        if (Auth::check()) {
+          
+            $check = DB::table('buycar')->select('proname')->where('proname', '=', "$name")->where('name', '=', "$username")->get();
+            
+            if (count($check)> 0) {
+                DB::update("update buycar set quantity=quantity+$num,total=quantity*proprice where proname='$name' and name='$username'");
+            } else {
+               
+                DB::insert("insert into buycar (proname,proprice,quantity,total,name) values ('$name',$price,'$num',$num*$price,'$username')");
+            }
+            return $request;
+        } else {
+            return 'login';
+        }
+    }
     public function prolist(Request $request)
     {
         $user = Auth::user();

@@ -17,7 +17,7 @@
             {{ csrf_field() }}
             <label>商品名稱:{{$prodetail->name}}</label><br>
             <input type="hidden" id="pname" name="pname" value="{{$prodetail->name}}" />
-            <label">價格:{{$prodetail->price}}</label><br>
+            <label>價格:{{$prodetail->price}}</label><br>
                 <input type="hidden" id="pprice" name="pprice" value="{{$prodetail->price}}" />
                 <label>庫存:{{$prodetail->stock}}</label><br>
                 <input id="buynum" name="buynum" type="number" value="1" min="1" oninput="if(value<1)value=1"

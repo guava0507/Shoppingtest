@@ -39,8 +39,18 @@ Route::post('/adminshoworder','adminorder@ordershow');
 
 //折扣優惠
 Route::post('/sale','adminsale@sale');
-
+Route::post('/salelist','adminsale@salelist');
+Route::post('/moneyfree',function(){
+return view('moneyfree');
+});
 Route::post('/moneysale',function(){
     return view('moneysale');
 });
 Route::post('/inmoneysale','adminsale@moneysale');
+Route::post('/inmoneyfree','adminsale@moneyfree');
+
+Route::post('/saledel','adminsale@saledel');
+Route::post('/saleedit','adminsale@saleedit');
+
+Route::post('/levelset','adminlevel@levelset');
+Route::post('/levelfinish','adminlevel@levelfinish');

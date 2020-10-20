@@ -35,11 +35,11 @@ class ProductSort extends Controller
         if ($tmpopt=='') {
             switch ($category) {
                 case 'all':
-                    $products = DB::table('products')->get();
+                    $products = DB::table('products')->where('status','=','上架')->get();
                     break;
 
                 case $category:
-                    $products = DB::table('products')->where('category', '=', "$category")->get();
+                    $products = DB::table('products')->where('category', '=', "$category")->where('status','=','上架')->get();
                     break;
                     
             }
@@ -49,25 +49,25 @@ class ProductSort extends Controller
             switch ($tmpopt) {
                 case 1:
                     if ($category == 'all') {
-                        $products = DB::table('products')->orderBy('created_at', 'desc')->get();
+                        $products = DB::table('products')->where('status','=','上架')->orderBy('created_at', 'desc')->get();
                     } else {
-                        $products = DB::table('products')->where('category', '=',"$tmpcate")->orderBy('created_at', 'desc')->get();
+                        $products = DB::table('products')->where('category', '=',"$tmpcate")->where('status','=','上架')->orderBy('created_at', 'desc')->get();
                     }
 
                     break;
                 case 2:
                     if ($category == 'all') {
-                        $products = DB::table('products')->orderBy('price', 'desc')->get();
+                        $products = DB::table('products')->where('status','=','上架')->orderBy('price', 'desc')->get();
                     } else {
-                        $products = DB::table('products')->where('category', '=',"$tmpcate")->orderBy('price', 'desc')->get();
+                        $products = DB::table('products')->where('category', '=',"$tmpcate")->where('status','=','上架')->orderBy('price', 'desc')->get();
                     }
 
                     break;
                 case 3:
                     if ($category == 'all') {
-                        $products = DB::table('products')->orderBy('name', 'asc')->get();
+                        $products = DB::table('products')->where('status','=','上架')->orderBy('name', 'asc')->get();
                     } else {
-                        $products = DB::table('products')->where('category', '=', "$tmpcate")->orderBy('name', 'asc')->get();
+                        $products = DB::table('products')->where('category', '=', "$tmpcate")->where('status','=','上架')->orderBy('name', 'asc')->get();
                     }
 
                     break;
@@ -80,25 +80,25 @@ class ProductSort extends Controller
         if ($tmpcate == 'all') {
             switch ($option) {
                 case 1:
-                    $products = DB::table('products')->orderBy('created_at', 'desc')->get();
+                    $products = DB::table('products')->where('status','=','上架')->orderBy('created_at', 'desc')->get();
                     break;
                 case 2:
-                    $products = DB::table('products')->orderBy('price', 'desc')->get();
+                    $products = DB::table('products')->where('status','=','上架')->orderBy('price', 'desc')->get();
                     break;
                 case 3:
-                    $products = DB::table('products')->orderBy('name', 'asc')->get();
+                    $products = DB::table('products')->where('status','=','上架')->orderBy('name', 'asc')->get();
                     break;
             }
         } else {
             switch ($option) {
                 case 1:
-                    $products = DB::table('products')->where('category', '=', "$tmpcate")->orderBy('created_at', 'desc')->get();
+                    $products = DB::table('products')->where('category', '=', "$tmpcate")->where('status','=','上架')->orderBy('created_at', 'desc')->get();
                     break;
                 case 2:
-                    $products = DB::table('products')->where('category', '=',"$tmpcate")->orderBy('price', 'desc')->get();
+                    $products = DB::table('products')->where('category', '=',"$tmpcate")->where('status','=','上架')->orderBy('price', 'desc')->get();
                     break;
                 case 3:
-                    $products = DB::table('products')->where('category', '=', "$tmpcate")->orderBy('name', 'asc')->get();
+                    $products = DB::table('products')->where('category', '=', "$tmpcate")->where('status','=','上架')->orderBy('name', 'asc')->get();
             }
         }
         //Session::put('tmpopt','');

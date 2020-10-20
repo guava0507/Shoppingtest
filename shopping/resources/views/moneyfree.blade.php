@@ -31,9 +31,9 @@
             xx購物網優惠活動
         </div>
         <div style="position:absolute;top:10vh">
-            <span>優惠名稱:</span><input type="text" id="inputname"/>
+            <span>優惠名稱:</span><input type="text" id="inputname" />
             <span>輸入達標金額:</span><input type="number" id="inputmoney" />
-            <span>輸入折扣:</span><input  type="number" id="inputsale" min='1' max='99' />
+            <span>輸入贈送購物金金額:</span><input type="number" id="inputsale" min='1'>
             <span>等級限制</span><input type="number" id="inputlevel" min='1' max='5'/>
             <button id="btnOK">確認送出</button>
 
@@ -44,16 +44,16 @@
             $('#btnOK').click(function () {
                 var money = $('#inputmoney').val();
                 var sale = $('#inputsale').val();
-                var name= $('#inputname').val();
-                var level =$('#inputlevel').val();
+                var name = $('#inputname').val();
+                var level = $('#inputlevel').val();
                 $.ajax({
                     method: "post",
-                    url: "/inmoneysale",
+                    url: "/inmoneyfree",
                     data: {
-                        name:name,
+                        name: name,
                         money: money,
                         sale: sale,
-                        level:level,
+                        level: level,
                         '_token': '{{csrf_token()}}'
                     },
                     success: function (e) {

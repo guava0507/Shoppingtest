@@ -59,7 +59,10 @@ class adminproductmanage extends Controller
         $status = $request->productstatus;
         $name = $request->productname;
         $tmpcate = Session::get('tmpcate');
-        
+        if($tmpcate=="")
+        {
+            $tmpcate='all';
+        }
         DB::update("update products set status ='$status' where name = '$name'");
         //return 'xx';
         if($tmpcate=='all')
@@ -83,15 +86,17 @@ class adminproductmanage extends Controller
 
     }
     public function formshow(Request $request)
-    {
+    {       
+      ;
         $type = $request->productcate;
         $products = DB::table('products')->get();
         $productype = DB::select("select type from productype where type='$type' UNION ALL select * from productype where type <>'$type' and type not like '%all%'");
         //return $productype;
        // return $request;
+       
         $view = view('productotal', compact( 'products','productype'))->renderSections()['value'];
         return response()->json(['html' => $view]);
-
+        
         return $productype;
         return $request;
     }
@@ -102,29 +107,38 @@ class adminproductmanage extends Controller
         $stock=$request->stock;
         $cate =$request->cate;
         $id =$request->id;
+        
         $oldname =$request->oldname;
+
+       // return $request;
         $check = DB::table('products')->select('name')->where('name','=',"$name")->get();
        $checkname=DB::select("select name from products where id<>$id and name ='$name'");
+      // return $request;
+    
        if(count($checkname)>0)
        {
            return "rename";
        }
-        if($cate==0)
+       //return $cate;
+        if($cate===0)
         {
+        
             if($oldname==$name)
             {
+              //  return "1";
                   DB::update("update products set  price=$price,stock=$stock where id =$id");
             }
             else
             {
-                DB::update("update products set  name='$name',price=$price,stock=$stock where id=$id'");
-
+               // return '2';
+                DB::update("update products set  name='$name',price=$price,stock=$stock where id=$id");
             }
         }
         else
         {
             if($oldname==$name)
             {
+                //return "X";
                   DB::update("update products set  price=$price,stock=$stock,category='$cate' where id =$id");
             }
             else
@@ -135,6 +149,7 @@ class adminproductmanage extends Controller
         }
         $products=DB::table('products')->get();
         $productype=DB::table('productype')->get();
+       // return $oldname.$name.$cate;
         $view = view('productotal', compact( 'products','productype'))->renderSections()['status'];
         return response()->json(['html' => $view]);
         //return $name."and".$price."and".$stock."and".$cate;
@@ -142,9 +157,15 @@ class adminproductmanage extends Controller
     public function catechoose(Request $request)
     {
         $cate = $request->cate;
+        
         if($cate=='all')
         {
             Session::put('tmpcate','all');
+            $products = DB::table('products')->get();
+            $productype=DB::table('productype')->get();
+        }
+        elseif($cate==null)
+        {
             $products = DB::table('products')->get();
             $productype=DB::table('productype')->get();
         }

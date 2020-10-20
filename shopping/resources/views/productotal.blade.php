@@ -121,7 +121,7 @@
     </div>
     <div id="back"></div>
     <script>
-        var id=0;
+        var id = 0;
         var choose = 0;
         var oldname = 0;
         var oldcate = 0;
@@ -154,12 +154,12 @@
             var name = $('#formname').val();
             var price = $('#formprice').val();
             var stock = $('#formstock').val();
-            var cate = choose;
+            var cate = $('#chooseval').val();
             $.ajax({
                 url: '/proeditOK',
                 method: "post",
                 data: {
-                    id:id,
+                    id: id,
                     oldname: oldname,
                     name: name,
                     price: price,
@@ -169,11 +169,18 @@
                 },
                 success: function (e) {
                     console.log(e)
-                    if(e=="rename")
-                    {
+                    if (e == "rename") {
                         alert('產品名已有人使用');
                     }
                     $("#tbstatus").html(e.html);
+                    
+                    alert('修改完成');
+                    $('#allform').css({
+                        'display': 'none'
+                    });
+                    $('#back').css({
+                        'display': 'none'
+                    });
                     choose = 0;
                     num = 0;
                 }
@@ -186,13 +193,13 @@
             $('#back').css({
                 'display': 'block'
             });
-            id=$(this).parent('tr').find("#proid").val();
+            id = $(this).parents('tr').find("#proid").val();
             var productname = $(this).parents('tr').find("#tdname").html();
             var productcate = $(this).parents('tr').find("#tdcate").html();
             var productprice = $(this).parents('tr').find("#tdprice").html();
-            var oldname=$(this).parent('tr').find("#tdname").html();
+
             productprice = productprice.replace('元', '');
-            oldname =$(this).parent('tr').find("#tdname").html();
+            oldname = $(this).parents('tr').find("#tdname").html();
             var productstock = $(this).parents('tr').find("#tdstock").html();
             $('#formname').val(productname);
             $('#formcate').val(productcate);
@@ -203,7 +210,7 @@
                 method: "post",
                 url: "/formshow",
                 data: {
-                    id:id,
+                    id: id,
                     productcate: productcate,
                     '_token': '{{csrf_token()}}',
                 },
@@ -214,6 +221,8 @@
                     $('#formstock').val(productstock);
 
                     console.log(e);
+
+
                 }
             })
         })
@@ -226,19 +235,21 @@
                 'display': 'none'
             });
         })
-        $('body').on('click','#typebtn', function () {
-                   var c = this.innerHTML;
-                   $.ajax({
-                       type:"post",
-                       url:'/categorychange',
-                       data:{cate:c,
-                       '_token':'{{csrf_token()}}'},
-                       success:function(a){
-                           console.log(a);
-                          $('#tbstatus').html(a.html);
-                       }
-                   })
-               })
+        $('body').on('click', '#typebtn', function () {
+            var c = this.innerHTML;
+            $.ajax({
+                type: "post",
+                url: '/categorychange',
+                data: {
+                    cate: c,
+                    '_token': '{{csrf_token()}}'
+                },
+                success: function (a) {
+                    console.log(a);
+                    $('#tbstatus').html(a.html);
+                }
+            })
+        })
     </script>
 </body>
 

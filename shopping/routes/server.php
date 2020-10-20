@@ -8,6 +8,7 @@ Route::post('/category','ProductSort@selProduct')->name('category');
 
 //加入購物車
 Route::post('/buycar','buycar@addcar')->name('buycar');
+Route::post('/addbuycar','buycar@weladd');
 //購物車
 Route::post('/prolist','buycar@prolist');
 Route::post('/qchange','buycar@qchange');
