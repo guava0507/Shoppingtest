@@ -54,3 +54,10 @@ Route::post('/saleedit','adminsale@saleedit');
 
 Route::post('/levelset','adminlevel@levelset');
 Route::post('/levelfinish','adminlevel@levelfinish');
+
+//訂單處理
+Route::post('/doorder',function(){
+    return view('doorder');
+});
+Route::post('/goorder','orderdeal@goorder');
+Route::post('/ordergo','orderdeal@ordergo');

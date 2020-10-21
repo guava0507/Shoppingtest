@@ -52,7 +52,10 @@
             {{ csrf_field() }}
             <button>優惠活動</button>
         </form>
-
+        <form  method="post" action="{{url('/doorder')}}">
+            {{ csrf_field() }}
+            <button>訂單處理</button>
+        </form>
         </div>
 
     </div>

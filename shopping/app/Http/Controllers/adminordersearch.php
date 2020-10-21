@@ -75,11 +75,12 @@ class adminordersearch extends Controller
         $get=$orderId;
         $ordershow=DB::select("select od.*  FROM orderdetail od join orders o on od.orderId =  o.orderId  where od.orderId=$get");
         $ordertotal =DB::select("select SUM(total) stotal from orderdetail where orderId = $get UNION select status from orders where orderId=$get");
-
+        $sale=DB::select("select sale from orders where orderId =$get");
+        $saletotal=DB::select("select stotal from orderdetail where orderId=$get");
         // $ordershow = DB::select("SELECT DISTINCT od.*,o.status FROM `$get` od join orders o on od.name = o.servername");
         // $ordertotal = DB::select("SELECT SUM(total) stotal FROM `$get` UNION SELECT status from orders where orderId = '$get'");
        // return $ordertotal;
-        return view('orderdetail',compact('ordershow','ordertotal'));
+        return view('orderdetail',compact('ordershow','ordertotal','sale','saletotal'));
 
         return $orderId;
     }

@@ -27,8 +27,11 @@ class OrderSearch extends Controller
         //$ordershow = DB::table('orderdetail')->where('orderId','=',"$get")->get();
         $ordershow=DB::select("select od.*  FROM orderdetail od join orders o on od.orderId =  o.orderId  where od.orderId=$get");
         $ordertotal =DB::select("select SUM(total) stotal from orderdetail where orderId = $get UNION select status from orders where orderId=$get");
+        $sale=DB::select("select sale from orders where orderId =$get");
+        $saletotal=DB::select("select stotal from orderdetail where orderId=$get");
        //return $ordertotal;
-        return view('orderdetail',compact('ordershow','ordertotal'));
+       //return $sale;
+        return view('orderdetail',compact('ordershow','ordertotal','sale','saletotal'));
        
     }
 }

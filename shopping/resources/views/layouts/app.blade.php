@@ -71,6 +71,13 @@
                                         document.getElementById('order-form').submit();">
                                         訂單資料
                                         </a>
+                                        <a href="{{url('/backorder')}}" onclick="event.preventDefault();
+                                        document.getElementById('backorder').submit();">
+                                        退貨
+                                        </a>
+                                        <form id="backorder" action="{{url('/backorder')}}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                        </form>
                                         <form id="order-form" action="{{url('/orderdata')}}" method="POST" style="display: none;">
                                         {{ csrf_field() }}
                                         </form>

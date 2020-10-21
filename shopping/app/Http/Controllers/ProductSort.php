@@ -14,7 +14,7 @@ class ProductSort extends Controller
         $category = $request['cate'];
        
         
-        if ($category == 'all') {
+        if ($category == 'all' or $category=="") {
             Session::put('tmpcate','all');
         }
       elseif(!isset($category))

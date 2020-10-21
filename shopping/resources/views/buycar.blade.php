@@ -49,6 +49,7 @@
   </div>
   <div id="allform">
     <form id="useform">
+      {{ csrf_field() }}
       <div class="form-group">
         收件人:
         <input type="text" name="getname" class="form-control" id="getname">
@@ -57,12 +58,7 @@
         地址:
         <input type="text" class="form-control" name="getaddress" id="getaddress">
       </div>
-      <div class="form-group">
-        優惠選擇:
-        <select id="selectsale" >
-          
-        </select>
-      </div>
+
       <button id="sendOK" type="button" class="btn btn-primary"> 確定送出</button>
       <button id="btncancel" type="button" class="btn btn-secondary">取消</button>
     </form>
@@ -91,14 +87,31 @@
       <td></td>
       <td></td>
       <td></td>
-      <td id="ctotal"><span id="stotal" name="stotal">應付金額:{{$carlistt[0]->stotal}}元<span></td>
+      <td id="ctotal">應付金額:<span id="stotal" name="stotal">{{$carlistt[0]->stotal}}</span>元</td>
     </tr>
 
   </table>
   @show
-
-
-  
+  <div style="position:absolute;top:10vh;left:10vw;">
+    優惠選擇:
+    <select id="selectsale">
+      <option value="x">不使用優惠/無優惠/使用購物金</option>
+      @foreach($sale1 as $sale1s)
+      <option value="{{$sale1s->saleId}}">優惠{{$sale1s->name}}:滿{{$sale1s->money}}打{{$sale1s->sale}}折</option>
+      @endforeach
+      <option disabled="false">-------------------------------</option>
+      @foreach($sale2 as $sale2s)
+      <option value="{{$sale2s->saleId}}">優惠{{$sale2s->name}}:滿{{$sale2s->money}}送{{$sale2s->sale}}元購物金</option>
+      @endforeach
+    </select>
+  </div>
+  <div style="position: absolute;top:10vh;right:50vw">
+    @if($usemoney[0]->total>0)
+    <input type="checkbox" id="buymoneycheck" />使用購物金折抵
+    @else
+    <input type="checkbox" id="buymoneycheck" disabled="true" />沒有購物金可使用
+    @endif
+  </div>
   <button id="btndelete" name="btndelete" class="btn btn-danger"
     style="position:absolute;top:25vh;right:3vw;">刪除</button>
   <button id="btnall" name="btnall" class="btn btn-warning" style="position:absolute;top:10vh;left:0vw;">全選</button>
@@ -160,6 +173,49 @@
         }
       })
     })
+
+    //選擇優惠
+    $('body').on('change', '#selectsale', function () {
+      var sale = $('#selectsale').val();
+
+      $.ajax({
+        method: "post",
+        url: "/buysale",
+        data: {
+          sale: sale,
+          '_token': '{{csrf_token()}}'
+        },
+        success: function (e) {
+          $('#protable').html(e.html)
+          console.log(e);
+
+        }
+      })
+    })
+    //購物金使用
+    $('body').on('click', '#buymoneycheck', function () {
+      var x = $('#buymoneycheck ').prop("checked")
+      var sale = $('#selectsale').val();
+      if (x) {
+        $('#selectsale').prop('disabled', true);
+      } else {
+        $('#selectsale').prop('disabled', false);
+      }
+      $.ajax({
+        method: "post",
+        url: "/usemoney",
+        data: {
+          x: x,
+          sale:sale,
+          '_token': '{{csrf_token()}}'
+        },
+        success: function (e) {
+          $('#protable').html(e.html)
+          console.log(e)
+        }
+      })
+
+    })
     //刪除及金額變動
     $("#btndelete").click(function () {
       var allcheck = $(":checkbox:checked");
@@ -185,12 +241,11 @@
         data: {
           delprice: delprice,
           delname: delname,
-
           list: total,
           '_token': '{{csrf_token()}}'
         },
         success: function (e) {
-          console.log(e);
+          //  console.log(e);
           if (e != 'nothing') {
             $('#protable').html(e.html)
           }
@@ -219,17 +274,21 @@
 
       }
 
-
     })
+
+    //完成訂單 產生訂單
     $('#sendOK').click(function () {
       var check = {};
       var getquantity = {};
+      var box = $('#buymoneycheck ').prop("checked")
       $("input[name='proquantity']").each(function (index) {
 
         getquantity[index] = $(this).val();
       })
       var getaddress = $('#getaddress').val();
       var getname = $('#getname').val();
+      var total = $('#stotal').text();
+      var sale = $('#selectsale :selected').text();
       $("input[name='proquantity']").each(function (index) {
 
         check[index] = parseInt($(this).val());
@@ -239,25 +298,33 @@
         url: '/send',
         method: "post",
         data: {
+          box:box,
+          sale: sale,
+          total: total,
           getquantity: getquantity,
           getaddress: getaddress,
           getname: getname,
           '_token': '{{csrf_token()}}'
         },
         success: function (e) {
+          if (e == 'space') {
+            alert('請勿空白');
+          } else {
+            $('#protable').html(e.html);
+            alert('訂單成立！');
+            $('#allform').css({
+              'display': 'none'
+            });
+            $('#getaddress').val('');
+            $('#getname').val('');
+            $('#back').css({
+              'display': 'none'
+            });
 
 
+          }
           console.log(e);
-          //alert('訂單成立！');
-          $('#protable').html(e.html);
-          $('#allform').css({
-            'display': 'none'
-          });
-          $('#getaddress').val('');
-          $('#getname').val('');
-          $('#back').css({
-            'display': 'none'
-          });
+
 
         }
       })

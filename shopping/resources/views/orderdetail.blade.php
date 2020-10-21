@@ -34,6 +34,7 @@
         <div>
             <span style="position:absolute;top:10vh">訂單內容</span><span
                 style="position:absolute;top:10%;left:5%">收件人:{{$ordershow[0]->name}}</span>
+        <span style="position:absolute;top:10vh;right:30vw">使用優惠:{{$sale[0]->sale}}</span>
             <table style="position:absolute;top:13vh;border:2px;" class="table table-dark">
                 <tr>
                     <td>產品名稱:</td>
@@ -53,7 +54,7 @@
                     <td>出貨狀況:{{$ordertotal[1]->stotal}}</td>
                     <td></td>
                     <td>地址:{{$ordershow[0]->address}}</td>
-                    <td>應付金額:{{$ordertotal[0]->stotal}}元<span></td>
+                    <td>應付金額:{{$saletotal[0]->stotal}}元<span></td>
                 </tr>
             </table>
         </div>

@@ -26,33 +26,43 @@
 </head>
 
 <body>
-    
+
     <div class="content">
+
         <div style="height:10vh;" class="title m-b-md">
             xx購物網優惠活動
         </div>
         @section('all')
-        <div style="position:absolute;top:10vh" id="all">
-            @foreach($level as $lev)
-            <span>等級{{$lev->level}}</span><input min="1" type="number" name="inputnum" id="input{{$lev->level}}"
-                value="{{$lev->money}}" disabled><br>
-            <p></p>
-            @endforeach
-            <button style="position:absolute;top:35vh" id="btnedit">修改</button>
+        <div id="all">
+            <div style="position:relative;top:10vh">
+                @foreach($level as $lev)
+                <span>等級{{$lev->level}}</span><input min="1" type="number" name="inputnum" id="input{{$lev->level}}"
+                    value="{{$lev->money}}" disabled><br>
+                <p></p>
+                @endforeach
+                <button style="position:absolute;top:35vh" id="btnedit">修改</button>
+                <div style="position: absolute;top:30vh">
+                    @if($level[0]->jump==1)
+                        <input  type="checkbox"  id="jump" checked disabled/>開啟跳級機制
+                    @else
+                        <input  type="checkbox"  id="jump"disabled/>開啟跳級機制
+                    @endif
+                </div>
+            </div>
         </div>
-        
         @show
     </div>
-  
+    
     <script>
         $('body').on('click', '#btnedit', function () {
             if ($('#btnedit').text() == '修改') {
                 $("input[name='inputnum']").prop("disabled", false);
                 $('#btnedit').text('完成');
-
+                $('#jump').prop("disabled",false);
 
             } else {
                 var array = [];
+                var check=$('#jump').prop('checked');
                 var x = $('#all').find("input").length;
                 for (var i = 1; i <= x; i++) {
                     array[i] = $('#all').find("#input" + i).val();
@@ -63,6 +73,7 @@
                     method: "post",
                     url: "/levelfinish",
                     data: {
+                        check:check,
                         x: x,
                         array: array,
                         '_token': '{{csrf_token()}}',
@@ -70,15 +81,13 @@
                     success: function (e) {
                         if (e == 'no') {
                             alert('請勿輸入負數');
-                        } 
-                        else if(e=='error')
-                        {
+                        } else if (e == 'error') {
                             alert('欄位請勿空白');
-                        }
-                        else{
+                        } else {
                             $('#all').html(e.html);
-                            // $('#btnedit').text('修改');
-                            // $("input[name='inputnum']").prop("disabled", true);
+                            $('#btnedit').text('修改');
+                            $('#jump').prop("disabled",true);
+                            $("input[name='inputnum']").prop("disabled", true);
                         }
                         console.log(e);
                     }

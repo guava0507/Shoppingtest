@@ -99,8 +99,9 @@
                <div>
               <a href="{{url('/buycar')}}" style="position:absolute;right:0px;top:40px;" class="btn btn-warning" >購物車</a>
                </div>
-
-
+            @if(isset($buymoney))
+                <span style="position: absolute;left:0;top:10vh">持有購物金:{{$buymoney[0]->total}}元</span>
+           @endif
                 <select id="productsort" name="productsort">
                 <option value="" disabled selected hidden>排列方式</option>
                <option value="1" >最新排序</option>

@@ -15,6 +15,8 @@ Route::post('/qchange','buycar@qchange');
 Route::post('/editfinish','buycar@finish');
 Route::get('buycar','buycar@buycar');
 Route::post('/send','buycar@sendpro');
+Route::post('/buysale','buycar@buysale');
+Route::post('/usemoney','buycar@usemoney');
 //認證刷新
 Route::get('/login/refereshcapcha','Auth\LoginController@refereshcapcha');
 
