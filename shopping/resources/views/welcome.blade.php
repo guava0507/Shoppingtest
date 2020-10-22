@@ -101,6 +101,7 @@
                </div>
             @if(isset($buymoney))
                 <span style="position: absolute;left:0;top:10vh">持有購物金:{{$buymoney[0]->total}}元</span>
+                <span style="position: absolute;left:0;top:7vh">帳號等級:{{$level[0]->level}}</span>
            @endif
                 <select id="productsort" name="productsort">
                 <option value="" disabled selected hidden>排列方式</option>

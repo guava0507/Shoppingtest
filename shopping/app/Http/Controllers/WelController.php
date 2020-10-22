@@ -21,10 +21,10 @@ class WelController extends Controller
             return view('welcome', compact('products', 'productype'));
         } else {
             $username = $user->name;
-            
+            $level=DB::table('users')->select('level')->where('name','=',"$username")->get();
             $buymoney=DB::select("select total from buymoney where user='$username' order by createT DESC limit 1");
            
-            return view('welcome', compact('products', 'productype', 'buymoney'));
+            return view('welcome', compact('products', 'productype', 'buymoney','level'));
         }
 
     }

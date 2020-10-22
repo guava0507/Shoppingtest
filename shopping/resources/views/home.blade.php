@@ -13,7 +13,7 @@
                         {{ session('status') }}
                     </div>
                     @endif
-                    歡迎登入！
+                    個人資訊
                 </div>
             </div>
         </div>

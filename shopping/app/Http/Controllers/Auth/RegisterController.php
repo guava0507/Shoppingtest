@@ -67,6 +67,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $n=$data['name'];
+        DB::insert("insert into buyrecord (user,record,total,createT) values ('$n',0,0,CURRENT_TIMESTAMP)");
         DB::insert("insert into buymoney (user,record,total,createT) values ('$n',0,0,CURRENT_TIMESTAMP)");
         return User::create([
             'name' => $data['name'],

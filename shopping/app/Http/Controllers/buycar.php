@@ -270,16 +270,18 @@ class buycar extends Controller
             if($box ==='true')
             {
                 $sale="使用購物金".$gap."元";
-                //return $sale;
-            }
-            //return "test";
+                $to = DB::select("select total from buymoney where user='$username' order by createT DESC limit 1");
+                $ts = $to[0]->total;
+                DB::insert("insert into buymoney (user,record,total,createT) values ('$username',-$gap,$ts+(-$gap),CURRENT_TIMESTAMP)");
+            } 
+            
+            
             DB::insert("insert into orders (servername,createT,sale) values ('$username',CURRENT_TIMESTAMP,'$sale')");
             $neworder = DB::select("select id from orders order by id DESC limit 1");
             $order = $orderdate . $neworder[0]->id;
 
             DB::update("update orders set orderId = '$order' where servername = '$username' order by id DESC limit 1");
             // //  //return $order;
-
             $pronum = DB::table('buycar')->select('proname', 'proprice', 'quantity', 'total')->where('name', '=', "$username")->get();
             // return $pronum[0]->proname;
             //return "test";
@@ -294,10 +296,10 @@ class buycar extends Controller
             }
             // return $neworder[0]->id;
             //return "test";
-            $to = DB::select("select total from buymoney where user='$username' order by createT DESC limit 1");
-             $ts = $to[0]->total;
+           
              //return $ts;
-            DB::insert("insert into buymoney (user,record,total,createT) values ('$username',-$gap,$ts+(-$gap),CURRENT_TIMESTAMP)");
+             
+            //DB::insert("insert into buymoney (user,record,total,createT) values ('$username',-$gap,$ts+(-$gap),CURRENT_TIMESTAMP)");
             //return "x";
             DB::delete("delete from buycar where name='$username'");
             $carlist = DB::select("select * from buycar where name='$username'");
